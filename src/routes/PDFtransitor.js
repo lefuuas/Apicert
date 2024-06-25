@@ -7,7 +7,7 @@ router.post('/pdf/upload', PDF.uploadMiddleware, PDF.PdfUpload);
 
 router.post('/pdf/edit', PDF.uploadMiddleware, PDF.PdfEditado);
 
-router.get('/pdf/:id', PDF.getPdf);
+router.get('/get/pdf/:id', PDF.getPdf);
 
 router.get('/pdf/listar', PDF.listarArquivos);
 

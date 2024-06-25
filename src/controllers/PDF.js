@@ -84,8 +84,8 @@ export async function PdfUpload(req, res) {
 // Função para lidar com o PDF editado e mover para 'edited'
 export async function PdfEditado(req, res) {
     try {
-        if (!req.file) {
-            return res.status(400).send('Nenhum arquivo enviado.');
+        if (!req.file || !req.body.id) {
+            return res.status(400).send('Nenhum arquivo enviado ou ID não fornecido.');
         }
 
         const { originalname, path: tempPath } = req.file;
@@ -122,6 +122,10 @@ export async function getPdf(req, res) {
         const { id } = req.params;
         const { type } = req.query;
 
+        if (!id || !type) {
+            return res.status(400).send('ID ou tipo não fornecidos.');
+        }
+
         const dir = path.join(__dirname, '..', 'pdfs', id, type);
         const files = await fs.promises.readdir(dir);
 
@@ -153,6 +157,10 @@ export async function listarArquivos(req, res) {
 export async function verificarArquivoEditado(req, res) {
     try {
         const { id } = req.params;
+        if (!id) {
+            return res.status(400).send('ID não fornecido.');
+        }
+
         const controleArquivos = lerControleArquivos();
         const hasEdited = controleArquivos[id] ? controleArquivos[id].hasEdited : false;
         res.status(200).json({ id, hasEdited });
